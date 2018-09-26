@@ -52,6 +52,8 @@
 
         'Microsoft.SqlServer.BatchParser',
         'Microsoft.SqlServer.BatchParserClient',
+        'Microsoft.SqlServer.BatchParserx86',
+        'batchparser',
         'Microsoft.SqlServer.BulkInsertTaskConnections',
         'Microsoft.SqlServer.DTSRuntimeWrap',
         'Microsoft.SqlServer.DtsServer.Interop',
