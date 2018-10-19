@@ -20,6 +20,6 @@ else {
 #$PSDefaultParameterValues['*:WarningAction'] = 'SilentlyContinue'
 
 $securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
+$cred = New-Object System.Management.Automation.PSCredential ("sa", $securePassword)
 
 $PSDefaultParameterValues['*:SqlCredential'] = $cred

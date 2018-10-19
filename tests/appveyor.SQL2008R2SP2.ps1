@@ -46,12 +46,10 @@ Write-Host -Object "$indent Executing startup scripts for SQL Server 2008" -Fore
 foreach ($file in (Get-ChildItem C:\github\appveyor-lab\sql2008-startup\*.sql -Recurse -ErrorAction SilentlyContinue)) {
     Invoke-Sqlcmd2 -ServerInstance $sqlinstance -InputFile $file
 }
-
-Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
-Invoke-DbaQuery -SqlInstance $sqlinstance -Query "EXEC master..sp_addsrvrolemember @loginame = N'sqladmin', @rolename = N'sysadmin'"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "ALTER LOGIN [sa] WITH PASSWORD=N'sqladmin'"
 
 $securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
+$cred = New-Object System.Management.Automation.PSCredential ("sa", $securePassword)
 
 Stop-DbaProcess -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor"
 Get-DbaLogin -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor" | Remove-DbaLogin -Confirm:$false
