@@ -60,9 +60,9 @@ if ($sql2016Startup -eq 1) {
     Write-Host -Object "$indent something went wrong with startup scripts" -ForegroundColor DarkGreen
 }
 
-Invoke-DbaQuery -SqlInstance $sqlinstance -Query "ALTER LOGIN [sa] WITH PASSWORD=N'sqladmin'"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "ALTER LOGIN [sa] WITH PASSWORD=N'MSSQL10_50.SQL2008R2SP2\MSSQL\DATA\mastlog.ldf'"
 
-$securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
+$securePassword = ConvertTo-SecureString "MSSQL10_50.SQL2008R2SP2\MSSQL\DATA\mastlog.ldf" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("sa", $securePassword)
 
 Stop-DbaProcess -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor"

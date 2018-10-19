@@ -19,7 +19,7 @@ else {
 
 #$PSDefaultParameterValues['*:WarningAction'] = 'SilentlyContinue'
 
-$securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
+$securePassword = ConvertTo-SecureString "MSSQL10_50.SQL2008R2SP2\MSSQL\DATA\mastlog.ldf" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("sa", $securePassword)
 
 $PSDefaultParameterValues['*:SqlCredential'] = $cred
