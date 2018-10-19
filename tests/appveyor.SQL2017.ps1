@@ -59,12 +59,8 @@ $server.Query("IF NOT EXISTS (select * from sys.symmetric_keys where name like '
 $server.Query("IF EXISTS ( SELECT * FROM sys.tcp_endpoints WHERE name = 'End_Mirroring') DROP ENDPOINT endpoint_mirroring")
 $server.Query("CREATE CERTIFICATE dbatoolsci_AGCert WITH SUBJECT = 'AG Certificate'")
 
-
-Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
-GO
-ALTER SERVER ROLE [sysadmin] ADD MEMBER [sqladmin]
-GO
-"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "ALTER SERVER ROLE [sysadmin] ADD MEMBER [sqladmin]"
 
 $securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)

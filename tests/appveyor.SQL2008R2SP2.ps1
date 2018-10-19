@@ -47,11 +47,8 @@ foreach ($file in (Get-ChildItem C:\github\appveyor-lab\sql2008-startup\*.sql -R
     Invoke-Sqlcmd2 -ServerInstance $sqlinstance -InputFile $file
 }
 
-Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
-GO
-ALTER SERVER ROLE [sysadmin] ADD MEMBER [sqladmin]
-GO
-"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "EXEC master..sp_addsrvrolemember @loginame = N'sqladmin', @rolename = N'sysadmin'"
 
 $securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
