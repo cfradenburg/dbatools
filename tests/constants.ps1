@@ -17,4 +17,9 @@ else {
     $ssisserver = "localhost\sql2016"
 }
 
-$PSDefaultParameterValues['*:WarningAction' ] = 'SilentlyContinue'
+#$PSDefaultParameterValues['*:WarningAction'] = 'SilentlyContinue'
+
+$securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
+
+$PSDefaultParameterValues['*:SqlCredential'] = $cred

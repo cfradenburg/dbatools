@@ -58,3 +58,16 @@ $server = Connect-DbaInstance -SqlInstance $sqlinstance
 $server.Query("IF NOT EXISTS (select * from sys.symmetric_keys where name like '%DatabaseMasterKey%') CREATE MASTER KEY ENCRYPTION BY PASSWORD = '<StrongPassword>'")
 $server.Query("IF EXISTS ( SELECT * FROM sys.tcp_endpoints WHERE name = 'End_Mirroring') DROP ENDPOINT endpoint_mirroring")
 $server.Query("CREATE CERTIFICATE dbatoolsci_AGCert WITH SUBJECT = 'AG Certificate'")
+
+
+Invoke-DbaQuery -SqlInstance $sqlinstance -Query "CREATE LOGIN [sqladmin] WITH PASSWORD=N'sqladmin', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [sqladmin]
+GO
+"
+
+$securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
+
+Stop-DbaProcess -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor"
+Get-DbaLogin -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor" | Remove-DbaLogin -Confirm:$false

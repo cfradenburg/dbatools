@@ -52,3 +52,9 @@ GO
 ALTER SERVER ROLE [sysadmin] ADD MEMBER [sqladmin]
 GO
 "
+
+$securePassword = ConvertTo-SecureString "sqladmin" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("sqladmin", $securePassword)
+
+Stop-DbaProcess -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor"
+Get-DbaLogin -SqlInstance $sqlinstance -SqlCredential $cred -Login "BUILTIN\Administrators", "APPVYR-WIN\appveyor" | Remove-DbaLogin -Confirm:$false
