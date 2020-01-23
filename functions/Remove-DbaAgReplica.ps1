@@ -73,6 +73,11 @@ function Remove-DbaAgReplica {
         }
     }
     process {
+        if (Test-Bound -Not SqlInstance, InputObject) {
+            Stop-Function -Message "You must supply either -SqlInstance or an Input Object"
+            return
+        }
+
         if ($SqlInstance -and -not $Replica) {
             Stop-Function -Message "You must specify a replica when using the SqlInstance parameter."
             return
