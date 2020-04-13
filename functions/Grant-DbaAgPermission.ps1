@@ -104,6 +104,11 @@ function Grant-DbaAgPermission {
         [Microsoft.SqlServer.Management.Smo.Login[]]$InputObject,
         [switch]$EnableException
     )
+    begin {
+        if (!($SqlInstance -or $InputObject -or $MyInvocation.ExpectingInput)) {
+            Stop-Function -Message "You must supply either -SqlInstance or an Input Object"
+        }
+    }
     process {
         if (Test-Bound -Not SqlInstance, InputObject) {
             Stop-Function -Message "You must supply either -SqlInstance or an Input Object"\
